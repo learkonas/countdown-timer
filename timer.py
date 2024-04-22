@@ -2,23 +2,36 @@ import time
 import pygame
 import keyboard
 import threading
+import os
 
-base_countdown = 21
-while base_countdown <= 20 and base_countdown > 0:
+sound_files = os.listdir("sounds")                            ## checking the appropriate wav files are included
+num_sound_files = len(sound_files) -2                               # exclude the 0.wav and cannon.wav files
+sound_files = [file[:-4] for file in sound_files]                   # to remove the '.wav' file ending
+sound_files = [int(file) for file in sound_files if file.isdigit()] # remove the 'cannon' item and return an array of integers
+sound_files.sort()                                                  # sort the integers in ascending order
+for i in range(len(sound_files)-1):
+    if sound_files[i+1] - sound_files[i] != 1:
+        print(f"Warning: you may lack a {sound_files[i+1]-1}.wav sound file. Please check the /sounds/ folder.")
+        continue_status = input("Enter 'n' to stop and enter anything else to continue: ")
+        if continue_status == 'n':
+            exit()
+
+base_countdown = 0
+while base_countdown <= 0 or base_countdown > 20:
     try:
         base_countdown = int(input("\nHow many seconds would you like for each turn?\n")) #  https://evolution.voxeo.com/library/audio/prompts/numbers/index.jsp
     except:
-        print("Please enter a number between 0 and 20!")
+        print(f"Please enter a number between 0 and {num_sound_files}.")
 
 pygame.mixer.init()
-sound = {i: pygame.mixer.Sound(f"{i}.wav") for i in range(21)}
-start = pygame.mixer.Sound("cannon.wav")
+sound = {i: pygame.mixer.Sound(f"sounds\{i}.wav") for i in range(base_countdown+1)}
+start = pygame.mixer.Sound("sounds\cannon.wav")
 
 countdown_lock = threading.Lock()
 need_to_stop = False
 
 print(f"\n\nPrepare to play!")
-countdown = 1
+countdown = 10
 while countdown > 0:
     sound[countdown].play() 
     countdown -= 1  
