@@ -30,8 +30,8 @@ start = pygame.mixer.Sound("sounds\cannon.wav")
 countdown_lock = threading.Lock()
 need_to_stop = False
 
-print(f"\n\nPrepare to play!")
 countdown = 10
+print(f"\n\nPrepare to play in {countdown} seconds!")
 while countdown > 0:
     sound[countdown].play() 
     countdown -= 1  
