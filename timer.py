@@ -24,13 +24,17 @@ while base_countdown <= 0 or base_countdown > 20:
         print(f"Please enter a number between 0 and {num_sound_files}.")
 
 pygame.mixer.init()
-sound = {i: pygame.mixer.Sound(f"sounds\{i}.wav") for i in range(base_countdown+1)}
+sound_range = base_countdown
+if (base_countdown)<10:
+    sound_range = 10
+
+sound = {i: pygame.mixer.Sound(f"sounds\{i}.wav") for i in range(sound_range+1)}
 start = pygame.mixer.Sound("sounds\cannon.wav")
 
 countdown_lock = threading.Lock()
 need_to_stop = False
 
-countdown = 10
+countdown = sound_range
 print(f"\n\nPrepare to play in {countdown} seconds!")
 while countdown > 0:
     sound[countdown].play() 
